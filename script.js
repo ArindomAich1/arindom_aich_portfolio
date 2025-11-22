@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 terminalBody.scrollTop = 0;
 
                 // Slow scroll to bottom
-                const scrollSpeed = 1; // pixels per tick
-                const scrollDelay = 20; // ms per tick
+                const scrollSpeed = 0; // pixels per tick
+                const scrollDelay = 0; // ms per tick
 
                 const autoScroll = setInterval(() => {
                     // Check if reached bottom
@@ -61,12 +61,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start Boot
     runBootSequence();
 
+    const availableCommands = [
+        'help', 'clear', 'ls', 'ls -l', 'll',
+        'cat bio.txt', 'cat work_experience.log', 'cat education.txt',
+        './list_projects.sh', 'list_projects.sh', 'cat achievements.txt',
+        'grep -r "skills" .', 'grep -r "Skills" .', 'grep -r skills', 'grep -r Skills', 'skills',
+        './contact_me.sh', 'contact_me.sh',
+        'about', 'whoami', 'experience', 'projects', 'achievements', 'education', 'contact'
+    ];
+
     // Command Line Interaction
     userInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            const command = userInput.value.trim().toLowerCase();
-            handleCommand(command);
+            const command = userInput.value.trim();
+            handleCommand(command); // handleCommand handles case insensitivity for command matching, but we pass raw for now
             userInput.value = '';
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            const currentInput = userInput.value.toLowerCase();
+            if (currentInput) {
+                const matches = availableCommands.filter(cmd => cmd.toLowerCase().startsWith(currentInput));
+                if (matches.length === 1) {
+                    userInput.value = matches[0];
+                } else if (matches.length > 1) {
+                    // Find common prefix
+                    const commonPrefix = matches.reduce((a, b) => {
+                        let i = 0;
+                        while (i < a.length && i < b.length && a[i] === b[i]) i++;
+                        return a.substring(0, i);
+                    });
+                    userInput.value = commonPrefix;
+                }
+            }
         }
     });
 
@@ -140,10 +166,18 @@ MySQL, Docker, ChromaDB, Streamlit, SQLite, Apache Cassandra, And many more new 
 > Idea Presentation - 2nd Position.
 > Stack: Innovation
         `,
+        'achievements.txt': `
+GATE CS (2024) Qualified
+> Scorecard: https://drive.google.com/file/d/1vrP5sSSHwvz19G47c0RgR_5rguHnfhyR/view
+
+Patent Published:
+> "IoMT based hospital network system with openflow QoS support and Cloud/FOG offloading"
+> Application No: 202331068011
+        `,
         'contact_info': `
-Email: arindom.aich@example.com
-LinkedIn: linkedin.com/in/arindom-aich
-GitHub: github.com/arindomaich
+Email: arindomaich2@gmail.com
+LinkedIn: linkedin.com/in/arindomaich
+GitHub: github.com/ArindomAich1
         `
     };
 
@@ -163,6 +197,7 @@ GitHub: github.com/arindomaich
                     - cat bio.txt: View bio
                     - cat work_experience.log: View experience
                     - ./list_projects.sh: View projects
+                    - cat achievements.txt: View achievements
                     - grep -r "skills" .: View skills
                     - cat education.txt: View education
                     - ./contact_me.sh: View contact info
@@ -170,7 +205,7 @@ GitHub: github.com/arindomaich
                     - ls: List files
                     
                     Shortcuts (Scroll):
-                    - about, experience, projects, skills, education, contact
+                    - about, experience, projects, achievements, skills, education, contact
                 `;
                 break;
             case 'clear':
@@ -186,6 +221,7 @@ GitHub: github.com/arindomaich
                     -rw-r--r--  1 user  staff   4096 Nov 21 10:00 bio.txt
                     -rw-r--r--  1 user  staff   8192 Nov 21 10:00 work_experience.log
                     -rwxr-xr-x  1 user  staff   2048 Nov 21 10:00 list_projects.sh
+                    -rw-r--r--  1 user  staff   1024 Nov 21 10:00 achievements.txt
                     drwxr-xr-x  2 user  staff    128 Nov 21 10:00 skills
                     -rw-r--r--  1 user  staff   1024 Nov 21 10:00 education.txt
                     -rwxr-xr-x  1 user  staff    512 Nov 21 10:00 contact_me.sh
@@ -205,6 +241,9 @@ GitHub: github.com/arindomaich
             case './list_projects.sh':
             case 'list_projects.sh':
                 response = "Executing ./list_projects.sh...\n" + fileContents['projects_output'];
+                break;
+            case 'cat achievements.txt':
+                response = fileContents['achievements.txt'];
                 break;
             case 'grep -r "skills" .':
             case 'grep -r "Skills" .':
@@ -233,6 +272,11 @@ GitHub: github.com/arindomaich
             case 'projects':
                 setTimeout(() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to Projects section...";
+                shouldScrollToBottom = false;
+                break;
+            case 'achievements':
+                setTimeout(() => document.getElementById('achievements').scrollIntoView({ behavior: 'smooth' }), 100);
+                response = "Navigating to Achievements section...";
                 shouldScrollToBottom = false;
                 break;
             case 'skills':
@@ -271,8 +315,41 @@ GitHub: github.com/arindomaich
         }
     }
 
-    // Keep focus on input
-    document.addEventListener('click', () => {
-        userInput.focus();
+    // Keep focus on input, but allow clicking on other inputs/links
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
+            userInput.focus();
+        }
     });
+
+    // Contact Form Handling
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            const subject = `Portfolio Contact from ${name}`;
+            const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+
+            window.location.href = `mailto:arindomaich2@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            // Optional: Show success message in terminal
+            const outputDiv = document.createElement('div');
+            outputDiv.classList.add('output');
+            outputDiv.classList.add('text-output');
+            outputDiv.style.marginBottom = '10px';
+            outputDiv.innerText = "Opening email client...";
+            userInput.parentElement.before(outputDiv);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        });
+
+        // Handle button click manually if needed (though type="submit" should handle it)
+        const sendBtn = contactForm.querySelector('button');
+        sendBtn.addEventListener('click', () => {
+            contactForm.dispatchEvent(new Event('submit'));
+        });
+    }
 });
