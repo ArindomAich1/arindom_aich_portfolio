@@ -29,7 +29,31 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 bootSequence.style.display = 'none';
                 mainContent.classList.remove('hidden');
-                userInput.focus();
+
+                // Start at the top
+                terminalBody.scrollTop = 0;
+
+                // Slow scroll to bottom
+                const scrollSpeed = 1; // pixels per tick
+                const scrollDelay = 20; // ms per tick
+
+                const autoScroll = setInterval(() => {
+                    // Check if reached bottom
+                    if (Math.ceil(terminalBody.scrollTop + terminalBody.clientHeight) >= terminalBody.scrollHeight) {
+                        clearInterval(autoScroll);
+                        userInput.focus();
+                    } else {
+                        terminalBody.scrollTop += scrollSpeed;
+                    }
+                }, scrollDelay);
+
+                // Stop scrolling on user interaction
+                const stopScroll = () => clearInterval(autoScroll);
+                terminalBody.addEventListener('wheel', stopScroll);
+                terminalBody.addEventListener('touchstart', stopScroll);
+                terminalBody.addEventListener('keydown', stopScroll);
+                terminalBody.addEventListener('mousedown', stopScroll);
+
             }, 800);
         }
     }
@@ -50,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'bio.txt': `
 > Arindom Aich
 > Software Development Engineer
-> Passionate about building scalable backend solutions.
-> Java | Spring Boot | React | Docker | Cloud Computing
+> Passionate about building scalable tech solutions.
+> Java | Spring Boot | GenAI | Python | JS/TS | React | Docker | Cloud Computing
         `,
         'work_experience.log': `
 [ Sept 2024 - Present ] Software Development Engineer - 1 @ Octopi Labs
@@ -85,17 +109,19 @@ Sankardev Sishu/Vidya Niketan
         `,
         'skills_output': `
 Languages:
-[####################] Java
-[################----] JavaScript/TS
-[###############-----] Python
+[##################--] Java
+[################----] SQL
+[################----] Python
 [##############------] C/C++
-[#############-------] SQL
+[###########---------] JavaScript/TS
+[###########---------] Matlab
+[#######-------------] Assembly(x86)
 
 Frameworks:
-Spring Boot, Hibernate, React, Redux, Flask, LangChain
+Spring Boot, Hibernate, Flask, FastAPI, LangChain, React, Redux
 
 Tools:
-MySQL, Docker, ChromaDB, Streamlit, SQLite, Apache Cassandra
+MySQL, Docker, ChromaDB, Streamlit, SQLite, Apache Cassandra, And many more new age AI tools...
         `,
         'projects_output': `
 [ Ensuring QoS in IoMT ]
@@ -128,7 +154,7 @@ GitHub: github.com/arindomaich
         // Insert before the input line
         userInput.parentElement.before(outputDiv);
 
-        let response = '';
+        let shouldScrollToBottom = true;
 
         switch (cmd) {
             case 'help':
@@ -137,7 +163,7 @@ GitHub: github.com/arindomaich
                     - cat bio.txt: View bio
                     - cat work_experience.log: View experience
                     - ./list_projects.sh: View projects
-                    - grep -r "Skills" .: View skills
+                    - grep -r "skills" .: View skills
                     - cat education.txt: View education
                     - ./contact_me.sh: View contact info
                     - clear: Clear terminal
@@ -182,6 +208,9 @@ GitHub: github.com/arindomaich
                 break;
             case 'grep -r "skills" .':
             case 'grep -r "Skills" .':
+            case 'grep -r skills':
+            case 'grep -r Skills':
+            case 'skills':
                 response = fileContents['skills_output'];
                 break;
             case './contact_me.sh':
@@ -192,28 +221,34 @@ GitHub: github.com/arindomaich
             // Navigation Shortcuts
             case 'about':
             case 'whoami':
-                document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('hero').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to About section...";
+                shouldScrollToBottom = false;
                 break;
             case 'experience':
-                document.getElementById('experience').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('experience').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to Experience section...";
+                shouldScrollToBottom = false;
                 break;
             case 'projects':
-                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to Projects section...";
+                shouldScrollToBottom = false;
                 break;
             case 'skills':
-                document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('skills').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to Skills section...";
+                shouldScrollToBottom = false;
                 break;
             case 'education':
-                document.getElementById('education').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('education').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to Education section...";
+                shouldScrollToBottom = false;
                 break;
             case 'contact':
-                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }), 100);
                 response = "Navigating to Contact section...";
+                shouldScrollToBottom = false;
                 break;
             case '':
                 break;
@@ -230,8 +265,10 @@ GitHub: github.com/arindomaich
             userInput.parentElement.before(responseDiv);
         }
 
-        // Auto scroll to bottom
-        terminalBody.scrollTop = terminalBody.scrollHeight;
+        // Auto scroll to bottom only if not navigating
+        if (shouldScrollToBottom) {
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
     }
 
     // Keep focus on input
