@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'work_experience.log': `
 [ Sept 2024 - Present ] Software Development Engineer - 1 @ Octopi Labs
 > Backend solutions, Java, Spring Boot, Hibernate, MySQL, Docker, React.
-> Projects: Caremax, Gasolina, Resonance.
+> Projects: Coremax, Gasolina, Resonance.
 
 [ Mar 2024 - Aug 2024 ] Software Development Intern @ Octopi Labs
 > Backend solutions, Java, Spring Boot, Hibernate, MySQL, Docker, React.
