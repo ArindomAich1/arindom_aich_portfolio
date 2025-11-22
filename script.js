@@ -168,7 +168,7 @@ MySQL, Docker, ChromaDB, Streamlit, SQLite, Apache Cassandra, And many more new 
         `,
         'achievements.txt': `
 GATE CS (2024) Qualified
-> Scorecard: https://drive.google.com/file/d/1vrP5sSSHwvz19G47c0RgR_5rguHnfhyR/view
+> <a href="https://drive.google.com/file/d/1vrP5sSSHwvz19G47c0RgR_5rguHnfhyR/view" target="_blank" class="social-link">Scorecard</a>
 
 Patent Published:
 > "IoMT based hospital network system with openflow QoS support and Cloud/FOG offloading"
@@ -183,12 +183,16 @@ GitHub: github.com/ArindomAich1
 
     function handleCommand(cmd) {
         const outputDiv = document.createElement('div');
-        outputDiv.innerHTML = `<span class="prompt">user@visitor:~$</span> <span class="command">${cmd}</span>`;
+        // Escape cmd to prevent XSS in the command echo
+        const escapedCmd = cmd.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        outputDiv.innerHTML = `<span class="prompt">user@visitor:~$</span> <span class="command">${escapedCmd}</span>`;
 
         // Insert before the input line
         userInput.parentElement.before(outputDiv);
 
         let shouldScrollToBottom = true;
+        let response = '';
+        let useHTML = false;
 
         switch (cmd) {
             case 'help':
@@ -244,6 +248,7 @@ GitHub: github.com/ArindomAich1
                 break;
             case 'cat achievements.txt':
                 response = fileContents['achievements.txt'];
+                useHTML = true;
                 break;
             case 'grep -r "skills" .':
             case 'grep -r "Skills" .':
@@ -305,7 +310,11 @@ GitHub: github.com/ArindomAich1
             responseDiv.classList.add('output');
             responseDiv.classList.add('text-output');
             responseDiv.style.marginBottom = '10px';
-            responseDiv.innerText = response;
+            if (useHTML) {
+                responseDiv.innerHTML = response;
+            } else {
+                responseDiv.innerText = response;
+            }
             userInput.parentElement.before(responseDiv);
         }
 
