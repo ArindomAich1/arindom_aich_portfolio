@@ -414,3 +414,39 @@ textarea:focus {
 .hidden {
     display: none;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .terminal-container {
+        width: 95%;
+        height: 95vh;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .terminal-body {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .grid-output {
+        grid-template-columns: 100%;
+        width: 100%;
+    }
+
+    .command-section {
+        margin-bottom: 20px;
+    }
+
+    .interactive-line {
+        flex-wrap: wrap;
+    }
+
+    #user-input {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}
