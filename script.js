@@ -125,8 +125,8 @@ Tezpur University
 ├── B.Tech in CSE (Nov 2020 - June 2024)
 └── CGPA: 8.04
 
-Higher Secondary, AHSEC
-├── Nagaon, Assam (June 2017 - June 2019)
+Ramanujan Jr. College
+├── Higher Secondary, AHSEC (June 2017 - June 2019)
 └── 79.20%
 
 Sankardev Sishu/Vidya Niketan
