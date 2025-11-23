@@ -33,26 +33,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Start at the top
                 terminalBody.scrollTop = 0;
 
-                // Slow scroll to bottom
+                // Scroll settings
                 const scrollSpeed = 10; // pixels per tick
                 const scrollDelay = 5; // ms per tick
+                const initialDelay = 1000; // ms to wait before starting scroll
 
-                const autoScroll = setInterval(() => {
-                    // Check if reached bottom
-                    if (Math.ceil(terminalBody.scrollTop + terminalBody.clientHeight) >= terminalBody.scrollHeight) {
-                        clearInterval(autoScroll);
-                        userInput.focus();
-                    } else {
-                        terminalBody.scrollTop += scrollSpeed;
-                    }
-                }, scrollDelay);
+                // Wait 1 second, then start auto-scroll
+                setTimeout(() => {
+                    const autoScroll = setInterval(() => {
+                        // Check if reached bottom
+                        if (Math.ceil(terminalBody.scrollTop + terminalBody.clientHeight) >= terminalBody.scrollHeight) {
+                            clearInterval(autoScroll);
+                            userInput.focus();
+                        } else {
+                            terminalBody.scrollTop += scrollSpeed;
+                        }
+                    }, scrollDelay);
 
-                // Stop scrolling on user interaction
-                const stopScroll = () => clearInterval(autoScroll);
-                terminalBody.addEventListener('wheel', stopScroll);
-                terminalBody.addEventListener('touchstart', stopScroll);
-                terminalBody.addEventListener('keydown', stopScroll);
-                terminalBody.addEventListener('mousedown', stopScroll);
+                    // Stop scrolling on user interaction
+                    const stopScroll = () => clearInterval(autoScroll);
+                    terminalBody.addEventListener('wheel', stopScroll);
+                    terminalBody.addEventListener('touchstart', stopScroll);
+                    terminalBody.addEventListener('keydown', stopScroll);
+                    terminalBody.addEventListener('mousedown', stopScroll);
+                }, initialDelay);
 
             }, 800);
         }
@@ -327,7 +331,7 @@ GitHub: github.com/ArindomAich1
     // Keep focus on input, but allow clicking on other inputs/links
     document.addEventListener('click', (e) => {
         if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
-            userInput.focus();
+            userInput.focus({ preventScroll: true });
         }
     });
 
