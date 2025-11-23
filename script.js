@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 terminalBody.scrollTop = 0;
 
                 // Slow scroll to bottom
-                const scrollSpeed = 0; // pixels per tick
-                const scrollDelay = 0; // ms per tick
+                const scrollSpeed = 10; // pixels per tick
+                const scrollDelay = 5; // ms per tick
 
                 const autoScroll = setInterval(() => {
                     // Check if reached bottom
