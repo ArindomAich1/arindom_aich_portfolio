@@ -125,7 +125,6 @@ h2,
 h3,
 h4 {
     font-weight: 600;
-    margin-bottom: 10px;
 }
 
 h1 {
@@ -309,6 +308,7 @@ textarea:focus {
     display: flex;
     align-items: center;
     margin-top: 20px;
+    position: relative;
 }
 
 #user-input {
@@ -316,7 +316,16 @@ textarea:focus {
     width: auto;
     flex-grow: 1;
     margin-left: 10px;
-    caret-color: green;
+    caret-color: transparent;
+}
+
+.block-cursor {
+    position: absolute;
+    width: 10px;
+    height: 1.2em;
+    background-color: var(--text-color);
+    animation: blink 1s infinite;
+    pointer-events: none;
 }
 
 .cursor {

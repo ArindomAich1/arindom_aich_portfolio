@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 terminalBody.scrollTop = 0;
 
                 // Scroll settings
-                const scrollSpeed = 10; // pixels per tick
+                const scrollSpeed = 20; // pixels per tick
                 const scrollDelay = 5; // ms per tick
                 const initialDelay = 1000; // ms to wait before starting scroll
 
@@ -365,4 +365,37 @@ GitHub: github.com/ArindomAich1
             contactForm.dispatchEvent(new Event('submit'));
         });
     }
+
+    // Custom block cursor positioning
+    const blockCursor = document.querySelector('.block-cursor');
+    const updateCursorPosition = () => {
+        const text = userInput.value.substring(0, userInput.selectionStart);
+
+        // Create a temporary span to measure text width
+        const tempSpan = document.createElement('span');
+        tempSpan.style.cssText = `
+            position: absolute;
+            visibility: hidden;
+            font: ${window.getComputedStyle(userInput).font};
+            white-space: pre;
+        `;
+        tempSpan.textContent = text || '\u200B'; // Zero-width space if empty
+        document.body.appendChild(tempSpan);
+
+        const textWidth = tempSpan.offsetWidth;
+        document.body.removeChild(tempSpan);
+
+        // Position cursor relative to input's parent
+        const promptWidth = userInput.previousElementSibling.offsetWidth + 15; // prompt width + margin
+        blockCursor.style.left = `${promptWidth + textWidth}px`;
+    };
+
+    // Update cursor position on various events
+    userInput.addEventListener('input', updateCursorPosition);
+    userInput.addEventListener('click', updateCursorPosition);
+    userInput.addEventListener('keyup', updateCursorPosition);
+    userInput.addEventListener('focus', updateCursorPosition);
+
+    // Initial position
+    setTimeout(updateCursorPosition, 100);
 });
