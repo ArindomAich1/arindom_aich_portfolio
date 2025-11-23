@@ -316,6 +316,7 @@ textarea:focus {
     width: auto;
     flex-grow: 1;
     margin-left: 10px;
+    caret-color: green;
 }
 
 .cursor {
