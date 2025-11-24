@@ -154,6 +154,10 @@ Tools:
 MySQL, Docker, ChromaDB, Streamlit, SQLite, Apache Cassandra, And many more new age AI tools...
         `,
         'projects_output': `
+[ aiRen ]
+> AI based fashion eCommaerce platform with Persionalized stylists and virtual tryons
+> Stack: Python, AI/ML, MongoDB, Flask, Java, Springboot, LLMs, MySQL
+
 [ Ensuring QoS in IoMT ]
 > MeitY funded project using SDN.
 > Stack: React, TS, Redux, MySQL, Python, Cassandra
@@ -161,14 +165,6 @@ MySQL, Docker, ChromaDB, Streamlit, SQLite, Apache Cassandra, And many more new 
 [ Speaker Identification ]
 > Machine Learning based speaker recognition.
 > Stack: Python, ML
-
-[ IoMT Hospital Network ]
-> Patent published system for hospital networks.
-> Stack: Networking, IoT, Cloud
-
-[ BrainBox ]
-> Idea Presentation - 2nd Position.
-> Stack: Innovation
         `,
         'achievements.txt': `
 GATE CS (2024) Qualified
