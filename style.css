@@ -303,6 +303,11 @@ textarea:focus {
     color: var(--term-bg);
 }
 
+/* Mobile Instruction Default */
+.mobile-instruction {
+    display: none;
+}
+
 /* Interactive Line */
 .interactive-line {
     display: flex;
@@ -463,7 +468,17 @@ textarea:focus {
     }
 
     .interactive-line {
-        flex-wrap: wrap;
+        display: none;
+    }
+
+    .mobile-instruction {
+        display: block;
+        color: var(--accent-color);
+        text-align: center;
+        margin-top: 20px;
+        font-style: italic;
+        padding: 10px;
+        border: 1px dashed var(--dim-color);
     }
 
     #user-input {
